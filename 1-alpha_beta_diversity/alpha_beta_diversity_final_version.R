@@ -45,14 +45,14 @@ colSums(species_prop)
 # plot(x=c(1:length(relab_number_ordered)), y=log10(relab_number_ordered), pch = 20, xlab = "Rank", ylab = "Relative abundance of bacterial species", main = "Rank-plot of ordered relative abundance of bacterial species", xlim = c(0, 14000))
 # abline(h=-5, col = "red")
 # abline(h=-4, col = "blue")
-# abline(h=-4.5, col = "orange")
+# abline(h=-4.7, col = "orange")
 # dev.off()
 
-## It seems 10^-4.5 is the good cutoff
+## It seems 10^-4.7 is the good cutoff
 
 # 7. Use prevalence cut-off to remove bacterial species that are present in very low abundance
 ## Number of low abundance species in each sample
-cut_off <- 10^-4.5
+cut_off <- 10^-4.7
 
 ## If use presence cutoff, how many low abundance species are needed to be removed
 apply(species_prop, 2, function(x) sum(as.numeric(x) <= cut_off, na.rm = TRUE)) - apply(species_prop, 2, function(x) sum(as.numeric(x) <= 0, na.rm = TRUE))
