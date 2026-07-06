@@ -1,4 +1,4 @@
-# Gut Microbiome Analysis in Lewy Body Dementia (LBD) and Isolated REM Sleep Behavior Disorder (iRBD)
+# Gut Microbiome Analysis in Lewy Body Disease (LBD) and Isolated REM Sleep Behavior Disorder (iRBD)
 
 This repository contains the R analysis code for a gut microbiome study comparing individuals with Lewy Body Dementia (LBD) and isolated REM Sleep Behavior Disorder (iRBD) against their respective household controls. Shotgun metagenomic data were profiled using MetaPhlAn (species-level taxonomy) and HUMAnN (functional pathways).
 
