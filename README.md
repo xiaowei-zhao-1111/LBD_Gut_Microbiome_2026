@@ -28,12 +28,23 @@ Comparisons: LBD vs. LBD-Control and iRBD vs. iRBD-Control
 
 ```
 0-raw_data/
-    metaphlan_results_new.tsv      # Species-level relative abundance (MetaPhlAn output)
+    metaphlan_results_new.tsv      # Raw relative abundance data(MetaPhlAn output)
     pathway_results.tsv            # Functional pathway abundance (HUMAnN output)
     imputed_BMI_metadata.csv       # Sample metadata (condition, age, sex, BMI, clinical scores)
+    taxonomy_info       # Taxonomy information at each level
 
 1-alpha_beta_diversity/
     alpha_beta_diversity_final_version.R
+    shannon_4_groups.pdf                        # Shannon index boxplots across all 4 groups
+    richness_4_groups.pdf                       # Species richness boxplots across all 4 groups
+    stacked_bar_plot_family_all.pdf             # Stacked bar plots of family-level relative abundance
+    distribution_family_relative_abundance.csv  # Family-level relative abundance table
+    lbd_vs_control_results/
+        alpha_diversity_res_lbd_vs_control.csv  # Alpha diversity metrics for LBD vs. LBD-Control
+        pcoa_lbd_vs_control.pdf                 # PCoA plot for LBD vs. LBD-Control
+    irbd_vs_control_results/
+        alpha_diversity_results_irbd_vs_control.csv  # Alpha diversity metrics for iRBD vs. iRBD-Control
+        pcoa_irbd_vs_control.pdf                     # PCoA plot for iRBD vs. iRBD-Control
 
 2-microbial_taxa_analysis/
     different_prevalence_analysis_final_version.R
