@@ -153,8 +153,9 @@ All scripts apply a consistent preprocessing pipeline before statistical testing
 1. Extract species-level rows from MetaPhlAn output (rows matching `s__` but not `t__`)
 2. Normalize counts to relative proportions (column sums = 1)
 3. Apply an abundance cutoff (features below this threshold in a sample are set to zero)
-4. Arcsine square-root transformation for beta diversity and pathway analyses
-5. Merge with sample metadata; analyses use matched case-control pairs (household ID as random effect)
+4. Remove features detected in fewer than 10% of samples 
+5. Arcsine square-root transformation for beta diversity and differential abunance analyses
+6. Merge with sample metadata; analyses use matched case-control pairs (household ID as random effect)
 
 ## Reproducibility
 
