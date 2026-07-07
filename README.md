@@ -17,12 +17,12 @@ Four groups are compared across analyses:
 
 | Group | Label |
 |---|---|
-| Lewy Body Dementia patients | `lbd` |
-| LBD household controls | `lbd_control` |
-| Isolated REM Sleep Behavior Disorder patients | `irbd` |
-| iRBD household controls | `irbd_control` |
+| Lewy Body Disease patients | `LBD` |
+| LBD cohabitant controls | `LBD-Control` |
+| Isolated REM Sleep Behavior Disorder patients | `iRBD` |
+| iRBD household controls | `iRBD-Control` |
 
-Comparisons: LBD vs. LBD-Control, iRBD vs. iRBD-Control, and LBD vs. iRBD.
+Comparisons: LBD vs. LBD-Control and iRBD vs. iRBD-Control
 
 ## Repository Structure
 
