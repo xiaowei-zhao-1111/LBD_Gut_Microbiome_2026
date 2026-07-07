@@ -27,65 +27,65 @@ Comparisons: LBD vs. LBD-Control and iRBD vs. iRBD-Control
 ## Repository Structure
 
 ```
-0-raw_data/
-    metaphlan_results_new.tsv      # Raw relative abundance data(MetaPhlAn output)
-    pathway_results.tsv            # Functional pathway abundance (HUMAnN output)
-    imputed_BMI_metadata.csv       # Sample metadata (condition, age, sex, BMI, clinical scores)
-    taxonomy_info       # Taxonomy information at each level
-
-1-alpha_beta_diversity/
-    alpha_beta_diversity_final_version.R
-    shannon_4_groups.pdf                        # Shannon index boxplots across all 4 groups
-    richness_4_groups.pdf                       # Species richness boxplots across all 4 groups
-    stacked_bar_plot_family_all.pdf             # Stacked bar plots of family-level relative abundance
-    distribution_family_relative_abundance.csv  # Family-level relative abundance table
-    lbd_vs_control_results/
-        alpha_diversity_res_lbd_vs_control.csv  # Alpha diversity metrics for LBD vs. LBD-Control
-        pcoa_lbd_vs_control.pdf                 # PCoA plot for LBD vs. LBD-Control
-    irbd_vs_control_results/
-        alpha_diversity_results_irbd_vs_control.csv  # Alpha diversity metrics for iRBD vs. iRBD-Control
-        pcoa_irbd_vs_control.pdf                     # PCoA plot for iRBD vs. iRBD-Control
-
-2-microbial_taxa_analysis/
-    species_preprocessed.csv                            # Preprocessed species relative abundance (output of script 1, input for script 2)
-    1-differential_abundance_analysis_final_version.R
-    1-lbd_vs_control_diff_abundance_results/
-        lbd_vs_control_differential_abundance_p_values.csv   # Full p-value table (LBD vs. LBD-Control)
-        lbd_vs_control_diff_abun_p_fc_done.csv               # Results with fold change
-        sig_lbd_vs_control_diff_abun_species.csv             # Significant differentially abundant species
-        species_higher_in_LBD_than_Control.csv
-        species_higher_in_Control_than_LBD.csv
-        cohensD_lbd_vs_control_species.csv                   # Cohen's D effect sizes
-        volcano_plot_LBD_vs_Control.pdf
-        lbd_vs_control_boxplot_species.pdf
-        cohensD_LBD_species.pdf
-    2-different_prevalence_analysis_final_version.R
-    2-irbd_vs_control_diff_abundance_results/
-        irbd_vs_control_differential_abundance_p_values.csv  # Full p-value table (iRBD vs. iRBD-Control)
-        irbd_vs_control_diff_abun_p_fc_done.csv              # Results with fold change
-        species_higher_in_iRBD_than_Control.csv
-        species_higher_in_Control_than_iRBD.csv
-        cohensD_irbd_vs_control_species.csv                  # Cohen's D effect sizes
-        volcano_plot_iRBD_vs_Control.pdf
-        irbd_vs_control_boxplot_species.pdf
-        cohensD_irbd_vs_control_species.pdf
-    3-lbd_vs_control_diff_prevalence_results/
-        lbd_vs_control_prevalence_results.csv
-        sig_lbd_vs_control_prev.csv                          # Significant differentially prevalent species
-    4-irbd_vs_control_diff_prevalence_results/
-        irbd_vs_control_prevalence_results.csv
-        sig_irbd_vs_control_prev.csv                         # Significant differentially prevalent species
-
-3-microbial_functional_pathway_analysis/
-    pathway_analysis_final_version.R
-    pathway_taxonomy_analysis_final_version.R
-    pathways_contributed_by_bacterial_species_final_version.R
-
-4-gene_families_analysis/
-    gene_families_analysis_final_version.R
-
-5-correlation_analysis/
-    partial_correlation_analysis.R
+├── 0-raw_data/
+│   ├── metaphlan_results_new.tsv      # Raw relative abundance data (MetaPhlAn output)
+│   ├── pathway_results.tsv            # Functional pathway abundance (HUMAnN output)
+│   ├── imputed_BMI_metadata.csv       # Sample metadata (condition, age, sex, BMI, clinical scores)
+│   └── taxonomy_info                  # Taxonomy information at each level
+│
+├── 1-alpha_beta_diversity/
+│   ├── alpha_beta_diversity_final_version.R
+│   ├── shannon_4_groups.pdf                        # Shannon index boxplots across all 4 groups
+│   ├── richness_4_groups.pdf                       # Species richness boxplots across all 4 groups
+│   ├── stacked_bar_plot_family_all.pdf             # Stacked bar plots of family-level relative abundance
+│   ├── distribution_family_relative_abundance.csv  # Family-level relative abundance table
+│   ├── lbd_vs_control_results/
+│   │   ├── alpha_diversity_res_lbd_vs_control.csv  # Alpha diversity metrics for LBD vs. LBD-Control
+│   │   └── pcoa_lbd_vs_control.pdf                 # PCoA plot for LBD vs. LBD-Control
+│   └── irbd_vs_control_results/
+│       ├── alpha_diversity_results_irbd_vs_control.csv  # Alpha diversity metrics for iRBD vs. iRBD-Control
+│       └── pcoa_irbd_vs_control.pdf                     # PCoA plot for iRBD vs. iRBD-Control
+│
+├── 2-microbial_taxa_analysis/
+│   ├── species_preprocessed.csv                            # Preprocessed species relative abundance (remove low relateve abundance data, output of script 1, input for script 2)
+│   ├── 1-differential_abundance_analysis_final_version.R
+│   ├── 1-lbd_vs_control_diff_abundance_results/
+│   │   ├── lbd_vs_control_differential_abundance_p_values.csv   # Differential abundance analysis results with P- and q-values (LBD vs. LBD-Control)
+│   │   ├── lbd_vs_control_diff_abun_p_fc_done.csv               # Differential abundance analysis results with P- and q-values, as well as log2FC (LBD vs. LBD-Control)
+│   │   ├── sig_lbd_vs_control_diff_abun_species.csv             # Significant differential abundance species
+│   │   ├── species_higher_in_LBD_than_Control.csv
+│   │   ├── species_higher_in_Control_than_LBD.csv
+│   │   ├── cohensD_lbd_vs_control_species.csv                   # Cohen's D effect sizes
+│   │   ├── volcano_plot_LBD_vs_Control.pdf
+│   │   ├── lbd_vs_control_boxplot_species.pdf
+│   │   └── cohensD_LBD_species.pdf
+│   ├── 2-different_prevalence_analysis_final_version.R
+│   ├── 2-irbd_vs_control_diff_abundance_results/
+│   │   ├── irbd_vs_control_differential_abundance_p_values.csv  # Full p-value table (iRBD vs. iRBD-Control)
+│   │   ├── irbd_vs_control_diff_abun_p_fc_done.csv              # Results with fold change
+│   │   ├── species_higher_in_iRBD_than_Control.csv
+│   │   ├── species_higher_in_Control_than_iRBD.csv
+│   │   ├── cohensD_irbd_vs_control_species.csv                  # Cohen's D effect sizes
+│   │   ├── volcano_plot_iRBD_vs_Control.pdf
+│   │   ├── irbd_vs_control_boxplot_species.pdf
+│   │   └── cohensD_irbd_vs_control_species.pdf
+│   ├── 3-lbd_vs_control_diff_prevalence_results/
+│   │   ├── lbd_vs_control_prevalence_results.csv
+│   │   └── sig_lbd_vs_control_prev.csv                          # Significant differentially prevalent species
+│   └── 4-irbd_vs_control_diff_prevalence_results/
+│       ├── irbd_vs_control_prevalence_results.csv
+│       └── sig_irbd_vs_control_prev.csv                         # Significant differentially prevalent species
+│
+├── 3-microbial_functional_pathway_analysis/
+│   ├── pathway_analysis_final_version.R
+│   ├── pathway_taxonomy_analysis_final_version.R
+│   └── pathways_contributed_by_bacterial_species_final_version.R
+│
+├── 4-gene_families_analysis/
+│   └── gene_families_analysis_final_version.R
+│
+└── 5-correlation_analysis/
+    └── partial_correlation_analysis.R
 ```
 
 ## Analysis Modules

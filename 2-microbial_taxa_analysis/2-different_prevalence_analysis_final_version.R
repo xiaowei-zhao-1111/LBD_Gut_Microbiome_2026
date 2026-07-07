@@ -191,36 +191,36 @@ intersect(sig_lbd_vs_control_prev_ordered_done$species, sig_irbd_vs_control_prev
 
 ###############################################################################
 
-# 1. 
+# 1. Combine the significant species from both LBD and iRBD analyses
 sig_species_all <- c(sig_lbd_vs_control_prev_ordered_done$species, sig_irbd_vs_control_prev_ordered_done$species)
 
-# 2. 
+# 2. Filter the LBD vs Control prevalence data to include only the significant species and the condition column
 lbd_df <- lbd_vs_control_prev_filtered[, colnames(lbd_vs_control_prev_filtered) %in% c(sig_species_all, "condition")]
 
-# 3. 
+# 3. Calculate prevalence for each species in LBD and Control groups
 lbd_results <- lbd_df %>%
   pivot_longer(-condition, names_to = "species", values_to = "presence") %>%
   group_by(condition, species) %>%
   summarise(prevalence = mean(presence) * 100, .groups = "drop") %>%
   pivot_wider(names_from = condition, values_from = prevalence)
 
-# 4. 
+# 4. Filter the iRBD vs Control prevalence data to include only the significant species and the condition column
 irbd_df <- irbd_vs_control_prev_filtered[, colnames(irbd_vs_control_prev_filtered) %in% c(sig_species_all, "condition")]
 
-# 5. 
+# 5. Calculate prevalence for each species in iRBD and Control groups
 irbd_results <- irbd_df %>%
   pivot_longer(-condition, names_to = "species", values_to = "presence") %>%
   group_by(condition, species) %>%
   summarise(prevalence = mean(presence) * 100, .groups = "drop") %>%
   pivot_wider(names_from = condition, values_from = prevalence)
 
-# 6. 
+# 6. Merge the LBD and iRBD results into a single dataframe
 lbd_irbd_df <- merge(lbd_results, irbd_results, by = "species", all = T)
 
-# 7. 
+# 7. Rename the columns for clarity
 lbd_irbd_long_df <- melt(lbd_irbd_df, id.vars = "species")
 
-# 8. 
+# 8. Rename the levels of the 'variable' column for clarity
 lbd_irbd_long_done <- lbd_irbd_long_df %>%
   mutate(variable = case_when(
     variable == "lbd" ~ "LBD",
@@ -230,7 +230,7 @@ lbd_irbd_long_done <- lbd_irbd_long_df %>%
     TRUE ~ variable  # leave other values unchanged
   ))
 
-# 9. 
+# 9. Set the order of the 'variable' factor for consistent plotting
 lbd_irbd_long_done$variable <- factor(lbd_irbd_long_done$variable, levels = c("LBD", "LBD_Control", "iRBD", "iRBD_Control"))
 
 ###############################################################################
@@ -242,92 +242,40 @@ lbd_irbd_long_done$variable <- factor(lbd_irbd_long_done$variable, levels = c("L
 # 1. Define species increase gradually from iRBD to LBD
 group1 <- c("Oscillospiraceae_bacterium_CLA_AA_H250", "Akkermansia_muciniphila", "Actinomyces_oris", "GGB3730_SGB5060", "GGB9627_SGB15081")
 
-# Filter data for selected species
-lbd_irbd_long_done_g1 <- lbd_irbd_long_done[lbd_irbd_long_done$species %in% group1, ]
-
-# Get species order based on decreasing value in LBD group
-order1 <- lbd_irbd_long_done_g1 %>%
-  filter(variable == "LBD") %>%
-  arrange(desc(value)) %>%
-  pull(species)
-
-# Apply factor levels to reorder species
-lbd_irbd_long_done_g1$species <- factor(lbd_irbd_long_done_g1$species, levels = order1)
-
-pdf(file = "barplot_group1.pdf", width = 10, height = 6)
-plot <- ggplot(lbd_irbd_long_done_g1, 
-               aes(x = species, y = value, fill = variable)) +
-  geom_bar(stat = "identity", position = position_dodge(), color = "black") +
-  labs(x = "", y = "Prevalence (%)") +
-  theme_bw() + 
-  theme(axis.text.x = element_text(angle = 45, hjust = 1), 
-        panel.grid.major.y = element_line(linetype = "dashed", color = "gray70", linewidth = 0.1),
-        panel.grid.major.x = element_blank(), 
-        panel.grid.minor = element_blank()) + 
-  scale_fill_manual(values = c("LBD" = "#ff9274", 
-                               "LBD_Control" = "#55b7e6",
-                               "iRBD" = "#2DA248",
-                               "iRBD_Control" = "#fdc848"))
-print(plot)
-dev.off()
-
+# 2. Define species decrease gradually from iRBD to LBD
 group2 <- c("Clostridia_bacterium_UC5_1_1D1", "Longicatena_caecimuris", "GGB9719_SGB15272")
 
-# Filter data for selected species
-lbd_irbd_long_done_g2 <- lbd_irbd_long_done[lbd_irbd_long_done$species %in% group2, ]
-
-# Get species order based on decreasing value in LBD group
-order1 <- lbd_irbd_long_done_g2 %>%
-  filter(variable == "LBD") %>%
-  arrange(desc(value)) %>%
-  pull(species)
-
-# Apply factor levels to reorder species
-lbd_irbd_long_done_g2$species <- factor(lbd_irbd_long_done_g2$species, levels = order1)
-
-pdf(file = "barplot_group2.pdf", width = 8, height = 6)
-plot <- ggplot(lbd_irbd_long_done_g2, 
-               aes(x = species, y = value, fill = variable)) +
-  geom_bar(stat = "identity", position = position_dodge(), color = "black") +
-  labs(x = "", y = "Prevalence (%)") +
-  theme_bw() + 
-  theme(axis.text.x = element_text(angle = 45, hjust = 1), 
-        panel.grid.major.y = element_line(linetype = "dashed", color = "gray70", linewidth = 0.1),
-        panel.grid.major.x = element_blank(), 
-        panel.grid.minor = element_blank()) + 
-  scale_fill_manual(values = c("LBD" = "#ff9274", 
-                               "LBD_Control" = "#55b7e6",
-                               "iRBD" = "#2DA248",
-                               "iRBD_Control" = "#fdc848"))
-print(plot)
-dev.off()
-
-
+# 3. Combine the two groups into a single vector
 group <- c(group1, group2)
 lbd_df <- lbd_vs_control_prev_results[lbd_vs_control_prev_results$species %in% group, ]
 colnames(lbd_df)[2] <- "lbd_p_value"
 irbd_df <- irbd_vs_control_prev_results[irbd_vs_control_prev_results$species %in% group, ]
 colnames(irbd_df)[2] <- "irbd_p_value"
 
+# 4. Merge the LBD and iRBD dataframes based on species
 lbd_irbd_df <- merge(lbd_df, irbd_df, by = "species", all = T)
-lbd_irbd_df_done <- lbd_irbd_df[, c(1, 3, 4, 6, 7)]
+lbd_irbd_df_done <- lbd_irbd_df[, c(1, 3, 4, 7, 8)]
 
+# 5. Set the order of the 'species' factor for consistent plotting
 lbd_irbd_df_done$species <- factor(lbd_irbd_df_done$species, levels = c(group))
 lbd_irbd_df_done_ordered <- lbd_irbd_df_done %>% arrange(species)
-write.csv(lbd_irbd_df_done_ordered, file = "lbd_and_irbd_prev_species.csv", row.names = F)
 
-pdf(file = "heatmap_all_lbd_and_irbd.pdf", width = 5.5, height = 3)
+# 6. Save the combined LBD and iRBD prevalence data to a CSV file
+write.csv(lbd_irbd_df_done_ordered, file = "./5-others/lbd_and_irbd_prev_species.csv", row.names = F)
+
+# 7. Create a heatmap of the combined LBD and iRBD prevalence data
+pdf(file = "./5-others/heatmap_all_lbd_and_irbd.pdf", width = 5.5, height = 3)
 pheatmap(data.matrix(lbd_irbd_df_done_ordered[2:5]), 
          color = colorRampPalette(c("#f7f3e8", "#b1182d"))(100), 
          border_color = "white",
          cluster_rows = F, 
          cluster_cols = F, 
-         cellwidth = 30, cellheight = 25,
+         cellwidth = 30, cellheight = 15,
          scale = "none", 
          main = "",
          angle_col = "45",
          labels_row = lbd_irbd_df_done_ordered$species,
          breaks = seq(0, 1, length.out = 101),
-         legend_breaks = seq(0, 1, 0.2),                   # ticks at 0,0.2,…,1
+         legend_breaks = seq(0, 1, 0.2),
          legend_labels = seq(0, 100, 20))
 dev.off()

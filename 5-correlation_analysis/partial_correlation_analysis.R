@@ -21,7 +21,7 @@ colnames(pathway_data) <- gsub("_S.*", "", colnames(pathway_data))
 pathway <- pathway_data
 
 # 2. Read the metadata
-metadata <- read.csv(file = "./0-raw_data/imputed_BMI_metadata_old.csv", sep = ",", header = T, row.names = 1)
+metadata <- read.csv(file = "./0-raw_data/imputed_BMI_metadata.csv", sep = ",", header = T, row.names = 1)
 species_clean <- species[, c(rownames(metadata))]
 pathway_clean <- pathway[, c(rownames(metadata))]
 
