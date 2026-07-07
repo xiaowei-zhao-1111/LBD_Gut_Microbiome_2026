@@ -61,8 +61,8 @@ Comparisons: LBD vs. LBD-Control and iRBD vs. iRBD-Control
 │   │   └── cohensD_LBD_species.pdf
 │   ├── 2-different_prevalence_analysis_final_version.R
 │   ├── 2-irbd_vs_control_diff_abundance_results/
-│   │   ├── irbd_vs_control_differential_abundance_p_values.csv  # Full p-value table (iRBD vs. iRBD-Control)
-│   │   ├── irbd_vs_control_diff_abun_p_fc_done.csv              # Results with fold change
+│   │   ├── irbd_vs_control_differential_abundance_p_values.csv  # Differential abundance analysis results with P- and q-values (iRBD vs. iRBD-Control)
+│   │   ├── irbd_vs_control_diff_abun_p_fc_done.csv              # Differential abundance analysis results with P- and q-values, as well as log2FC (iRBD vs. iRBD-Control)
 │   │   ├── species_higher_in_iRBD_than_Control.csv
 │   │   ├── species_higher_in_Control_than_iRBD.csv
 │   │   ├── cohensD_irbd_vs_control_species.csv                  # Cohen's D effect sizes
@@ -100,14 +100,18 @@ Comparisons: LBD vs. LBD-Control and iRBD vs. iRBD-Control
 ### 2. Microbial Taxa Analysis (`2-microbial_taxa_analysis/`)
 
 **Script 1 — Differential Abundance** (`1-differential_abundance_analysis_final_version.R`):
+- Species with relative abundance below 10^−4.7 excluded
+- Species detected in fewer than 10% of samples excluded
+- Relative abundances arcsine square-root transformed prior to statistical testing
 - Mixed-effects linear models (`lmerTest`) with household as a random effect to identify differentially abundant species
-- Abundance cutoff (10^−4.7) applied before testing; arcsine square-root transformation of proportions
 - Volcano plots, per-species boxplots, and Cohen's D effect sizes for both LBD vs. LBD-Control and iRBD vs. iRBD-Control
 - Outputs a preprocessed species table (`species_preprocessed.csv`) used as input for script 2
 
 **Script 2 — Differential Prevalence** (`2-different_prevalence_analysis_final_version.R`):
+- Species with relative abundance below 10^−4.7 excluded
+- Species detected in fewer than 10% of samples excluded
+- Relative abundances arcsine square-root transformed prior to statistical testing
 - Differential prevalence analysis using Fisher's exact test with Benjamini-Hochberg FDR correction
-- Prevalence cutoff filtering (species must be detected in ≥10% of samples)
 - Results saved separately for LBD vs. LBD-Control and iRBD vs. iRBD-Control
 
 ### 3. Functional Pathway Analysis (`3-microbial_functional_pathway_analysis/`)
