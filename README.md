@@ -103,15 +103,14 @@ Comparisons: LBD vs. LBD-Control and iRBD vs. iRBD-Control
 - Species with relative abundance below 10^−4.7 are set to 0
 - Species detected in fewer than 10% of samples excluded
 - Relative abundances arcsine square-root transformed prior to statistical testing
-- Mixed-effects linear models (`lmerTest`) with household as a random effect to identify differentially abundant species
+- Differentially abundant species were identified using mixed-effects linear models (`lmerTest`) with household as a random effect and age and BMI as covariates
 - Volcano plots, per-species boxplots, and Cohen's D effect sizes for both LBD vs. LBD-Control and iRBD vs. iRBD-Control
-- Outputs a preprocessed species table (`species_preprocessed.csv`) used as input for script 2
 
 **Script 2 — Differential Prevalence** (`2-different_prevalence_analysis_final_version.R`):
 - Species with relative abundance below 10^−4.7 are set to 0
 - Species detected in fewer than 10% of samples excluded
 - Relative abundances arcsine square-root transformed prior to statistical testing
-- Differential prevalence analysis using Fisher's exact test with Benjamini-Hochberg FDR correction
+- Differential prevalence analysis using Fisher's exact test
 - Results saved separately for LBD vs. LBD-Control and iRBD vs. iRBD-Control
 
 ### 3. Functional Pathway Analysis (`3-microbial_functional_pathway_analysis/`)
