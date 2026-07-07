@@ -5,10 +5,10 @@ library(ggplot2)
 library(purrr)
 
 ###############################################################################
-setwd("~/Desktop/LBD/analysis/pathway_analysis/")
+setwd("../3-microbial_functional_pathway_analysis")
 ###############################################################################
 
-pathway_taxonomy <- read.delim("~/Desktop/LBD/analysis/pathway_analysis/pathway_taxonomy_new.tsv", header = TRUE, stringsAsFactors = FALSE)
+pathway_taxonomy <- read.delim("./pathway_analysis/pathway_taxonomy_new.tsv", header = TRUE, stringsAsFactors = FALSE)
 rownames(pathway_taxonomy) <- pathway_taxonomy$X..Pathway
 pathway_taxonomy <- pathway_taxonomy[, -1]
 colnames(pathway_taxonomy) <- gsub("_S.*", "", colnames(pathway_taxonomy))
@@ -17,7 +17,7 @@ colSums(pathway_taxonomy)
 
 pathway_taxonomy_t <- data.frame(t(pathway_taxonomy))
 pathway_taxonomy_trans <- asin(sqrt(pathway_taxonomy_t))
-metadata <- read.csv(file = "~/Desktop/LBD/analysis/imputed_BMI_metadata.csv", row.names = 1)
+metadata <- read.csv(file = "./metadata/imputed_BMI_metadata.csv", row.names = 1)
 pathway_taxonomy_t_1 <- merge(pathway_taxonomy_t, metadata, by = "row.names")
 rownames(pathway_taxonomy_t_1) <- pathway_taxonomy_t_1$Row.names
 pathway_taxonomy_t_1 <- pathway_taxonomy_t_1[, -1]

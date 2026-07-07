@@ -5,10 +5,10 @@ library(purrr)
 library(RColorBrewer)
 
 ###############################################################################
-setwd("~/Desktop/LBD/analysis/pathway_analysis/")
+setwd("../3-microbial_functional_pathway_analysis")
 ###############################################################################
 
-pathway_taxonomy <- read.delim("~/Desktop/LBD/analysis/pathway_analysis/pathway_taxonomy_new.tsv", header = TRUE, stringsAsFactors = FALSE)
+pathway_taxonomy <- read.delim("./pathway_analysis/pathway_taxonomy_new.tsv", header = TRUE, stringsAsFactors = FALSE)
 rownames(pathway_taxonomy) <- pathway_taxonomy$X..Pathway
 pathway_taxonomy <- pathway_taxonomy[, -1]
 colnames(pathway_taxonomy) <- gsub("_S.*", "", colnames(pathway_taxonomy))
@@ -16,7 +16,7 @@ colnames(pathway_taxonomy) <- gsub("_S.*", "", colnames(pathway_taxonomy))
 colSums(pathway_taxonomy)
 
 pathway_taxonomy_t <- data.frame(t(pathway_taxonomy))
-metadata <- read.csv(file = "~/Desktop/LBD/analysis/imputed_BMI_metadata.csv", row.names = 1)
+metadata <- read.csv(file = "./metadata/imputed_BMI_metadata.csv", row.names = 1)
 pathway_taxonomy_t_1 <- merge(pathway_taxonomy_t, metadata, by = "row.names")
 rownames(pathway_taxonomy_t_1) <- pathway_taxonomy_t_1$Row.names
 pathway_taxonomy_t_1 <- pathway_taxonomy_t_1[, -1]
@@ -36,7 +36,7 @@ pathway_taxonomy_done <- pathway_taxonomy_1 %>%
 
 ###############################################################################
 
-lbd_irbd_sig <- read.csv(file = "~/Desktop/LBD/analysis/pathway_analysis/lbd_vs_irbd/sig_lbd_vs_irbd_diff_abun.csv")
+lbd_irbd_sig <- read.csv(file = "./pathway_analysis/lbd_vs_irbd/sig_lbd_vs_irbd_diff_abun.csv")
 
 sig_pathways <- lbd_irbd_sig$pathways
 sig_pathways_done <- sub(":.*", "", sig_pathways)

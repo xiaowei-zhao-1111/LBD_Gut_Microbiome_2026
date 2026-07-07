@@ -6,8 +6,7 @@ library(ggrepel)
 library(ggpubr)
 
 ###############################################################################
-folder_path <- "~/Desktop/LBD/analysis/pathway_analysis"
-setwd(folder_path)
+setwd("../3-microbial_functional_pathway_analysis")
 ###############################################################################
 
 # 1. Read the pathway relative abundance data
@@ -17,7 +16,7 @@ pathway_data <- read.csv(file = "pathway_results.tsv", sep = "\t", header = T, r
 colnames(pathway_data) <- gsub("_S.*", "", colnames(pathway_data))
 
 # 3. Read the metadata
-metadata <- read.csv(file = "/Users/M306307/Desktop/LBD/analysis/imputed_BMI_metadata.csv", sep = ",", header = T, row.names = 1)
+metadata <- read.csv(file = "../0-raw_data/imputed_BMI_metadata.csv", sep = ",", header = T, row.names = 1)
 pathway_clean <- pathway_data[, c(rownames(metadata))]
 
 # 4. Change the pathway data from percentage into proportion
@@ -229,7 +228,7 @@ overall_boxplot <- function(fc_results, grepl_term, group1, group2, file_name, c
   boxplot_long_df_done$pathway <- factor(boxplot_long_df_done$pathway, levels = order_of_pathway)
   boxplot_long_df_done$condition <- factor(boxplot_long_df_done$condition, levels = c(group1, group2))
   
-  pdf(file = paste0("~/Desktop/LBD/analysis/pathway_analysis/", file_name, "_boxplot_pathways.pdf"), height = 8, width = 10)
+  pdf(file = paste0("../3-microbial_functional_pathway_analysis/", file_name, "_boxplot_pathways.pdf"), height = 8, width = 10)
   plot <- ggplot(boxplot_long_df_done, 
                  aes(x = pathway, y = value, fill = condition)) + 
     geom_boxplot(outlier.color = "black", 
@@ -270,7 +269,7 @@ individual_boxplot <- function(boxplot_file, color1, color2, file_name) {
            y = "Relative abundance (arcsine square root transformed)",
            title = boxplot_file[i, 1])
     
-    pdf(file = paste0("~/Desktop/LBD/analysis/pathway_analysis/", file_name, "_boxplot_", boxplot_file[i, 1], ".pdf"), height = 6, width = 4)
+    pdf(file = paste0("pathway_analysis/", file_name, "_boxplot_", boxplot_file[i, 1], ".pdf"), height = 6, width = 4)
     print(plot)
     dev.off()
   }
@@ -369,7 +368,7 @@ lbd_vs_control_relab_transformed_filtered <- prevalence_cutoff(lbd_vs_control_re
 
 # 4. Use the mixed-effect linear model to get p values. household_id will be random effect, and age and BMI are confounding variables. 
 lbd_vs_control_diff_abun_p_results <- mixed_effect(lbd_vs_control_relab_transformed_filtered, "lbd_vs_control_diff_abun_p_values.csv")
-# lbd_vs_control_diff_abun_p_results <- read.csv(file = "~/Desktop/LBD/analysis/pathway_analysis/lbd_vs_control/lbd_vs_control_diff_abun_p_values.csv")
+# lbd_vs_control_diff_abun_p_results <- read.csv(file = "../3-microbial_functional_pathway_analysis/lbd_vs_control/lbd_vs_control_diff_abun_p_values.csv")
 sum(lbd_vs_control_diff_abun_p_results$p_value < 0.01)
 sum(lbd_vs_control_diff_abun_p_results$p_value < 0.05)
 
@@ -395,7 +394,7 @@ boxplot_data <- rbind(lbd_vs_control_fc_results[[1]], lbd_vs_control_fc_results[
 boxplot_data_done <- boxplot_data[boxplot_data$Row.names %in% order_of_pathway, ]
 
 boxplot_long_df <- melt(boxplot_data_done[, 1:51], id.vars = "Row.names")
-# write.csv(boxplot_long_df, "~/Desktop/LBD/analysis/pathway_analysis/lbd_vs_control_boxplot_long_df.csv")
+# write.csv(boxplot_long_df, "../3-microbial_functional_pathway_analysis/lbd_vs_control_boxplot_long_df.csv")
 boxplot_long_df$condition <- ifelse(grepl("control", boxplot_long_df$variable), "Control", "LBD")
 colnames(boxplot_long_df)[1] <- "pathway"
 boxplot_long_df$pathway <- factor(boxplot_long_df$pathway, levels = order_of_pathway)
@@ -403,7 +402,7 @@ boxplot_long_df$condition <- factor(boxplot_long_df$condition, levels = c("LBD",
 
 pwy_5505_lbd <- boxplot_long_df[grepl("PWY-5505", boxplot_long_df$pathway), ]
 
-pdf(file = paste0("~/Desktop/LBD/analysis/pathway_analysis/lbd_vs_control_boxplot_pathways.pdf"), height = 8, width = 10)
+pdf(file = paste0("../3-microbial_functional_pathway_analysis/lbd_vs_control_boxplot_pathways.pdf"), height = 8, width = 10)
 plot <- ggplot(boxplot_long_df, 
                aes(x = pathway, y = value, fill = condition)) + 
   geom_boxplot(outlier.color = "black", 
@@ -517,7 +516,7 @@ sig_lbd_vs_control_pathway_relab_og_t$pathway <- rownames(sig_lbd_vs_control_pat
 
 sig_lbd_vs_control_pathway_relab_og_t$pathway <- factor(sig_lbd_vs_control_pathway_relab_og_t$pathway, levels = order_of_pathway)
 
-pdf(file = "~/Desktop/LBD/analysis/pathway_analysis/lbd_vs_control/mean_diff_bar_lbd_control_v2.pdf", height = 7, width = 8)
+pdf(file = "../3-microbial_functional_pathway_analysis/lbd_vs_control/mean_diff_bar_lbd_control_v2.pdf", height = 7, width = 8)
 ggplot(sig_lbd_vs_control_pathway_relab_og_t, aes(x = as.factor(pathway), y = mean_diff)) +
   geom_bar(stat = "identity", fill = "#6abd45") +
   theme_bw() + 
@@ -556,7 +555,7 @@ irbd_vs_control_diff_abun_median <- log2_fc_results(irbd_vs_control_relab_transf
 sig_irbd_vs_control_diff_abun <- irbd_vs_control_diff_abun_median[[1]][irbd_vs_control_diff_abun_median[[1]]$p_value < 0.05 & irbd_vs_control_diff_abun_median[[1]]$log2fc != 0, ]
 nrow(sig_irbd_vs_control_diff_abun)
 sig_irbd_vs_control_diff_abun$group <- ifelse(sig_irbd_vs_control_diff_abun$log2fc>0, "iRBD>Control", "iRBD<Control")
-# write.csv(sig_irbd_vs_control_diff_abun, file = "~/Desktop/LBD/analysis/pathway_analysis/irbd_vs_control/sig_irbd_vs_control_diff_abun_pathway.csv", row.names = F)
+# write.csv(sig_irbd_vs_control_diff_abun, file = "../3-microbial_functional_pathway_analysis/irbd_vs_control/sig_irbd_vs_control_diff_abun_pathway.csv", row.names = F)
 
 # 7. Create the volcano plot
 irbd_vs_control_fc_results <- volcano_plot(irbd_vs_control_diff_abun_median[[2]], "iRBD", "Control", -10, 10) 
@@ -571,7 +570,7 @@ boxplot_data <- rbind(irbd_vs_control_fc_results[[1]], irbd_vs_control_fc_result
 boxplot_data_done <- boxplot_data[boxplot_data$Row.names %in% order_of_pathway, ]
 
 boxplot_long_df <- melt(boxplot_data_done[, 1:21], id.vars = "Row.names")
-# write.csv(boxplot_long_df, "~/Desktop/LBD/analysis/pathway_analysis/irbd_vs_control_boxplot_long_df.csv")
+# write.csv(boxplot_long_df, "../3-microbial_functional_pathway_analysis/irbd_vs_control_boxplot_long_df.csv")
 boxplot_long_df$condition <- ifelse(grepl("control", boxplot_long_df$variable), "Control", "irbd")
 colnames(boxplot_long_df)[1] <- "pathway"
 boxplot_long_df$pathway <- factor(boxplot_long_df$pathway, levels = order_of_pathway)
@@ -601,12 +600,12 @@ plot <- ggplot(pwy_5505, aes(x = condition, y = value, fill = condition)) +
   labs(x = "", 
        y = "Relative abundance (arcsine square root transformed)")
 
-pdf(file = "~/Desktop/LBD/analysis/pathway_analysis/pwy5505.pdf", height = 6, width = 4)
+pdf(file = "../3-microbial_functional_pathway_analysis/pwy5505.pdf", height = 6, width = 4)
 print(plot)
 dev.off()
 
 
-df_plot <- read.csv(file = "~/Desktop/LBD/analysis/pathway_analysis/pwy-5030.csv")
+df_plot <- read.csv(file = "../3-microbial_functional_pathway_analysis/pwy-5030.csv")
 df_plot$condition <- factor(df_plot$condition, levels = c("LBD", "LBD_Control", "iRBD", "iRBD_Control"))
 
 plot <- ggplot(df_plot, aes(x = condition, y = value, fill = condition)) + 
@@ -622,14 +621,14 @@ plot <- ggplot(df_plot, aes(x = condition, y = value, fill = condition)) +
   labs(x = "", 
        y = "Relative abundance (arcsine square root transformed)")
 
-pdf(file = "~/Desktop/LBD/analysis/pathway_analysis/pwy5030.pdf", height = 6, width = 6)
+pdf(file = "../3-microbial_functional_pathway_analysis/pwy5030.pdf", height = 6, width = 6)
 print(plot)
 dev.off()
 
 log2fc_mean_df <- sig_irbd_vs_control_diff_abun[sig_irbd_vs_control_diff_abun$pathways %in% order_of_pathway, ]
 log2fc_mean_df$pathways <- factor(log2fc_mean_df$pathways, levels = order_of_pathway)
 
-pdf(file = "~/Desktop/LBD/analysis/pathway_analysis/irbd_vs_control/mean_diff_bar_irbd.pdf", height = 5, width = 8)
+pdf(file = "../3-microbial_functional_pathway_analysis/irbd_vs_control/mean_diff_bar_irbd.pdf", height = 5, width = 8)
 ggplot(log2fc_mean_df, aes(x = as.factor(pathways), y = mean_difference)) +
   geom_bar(stat = "identity", fill = "#6abd45") +
   theme_bw() + 
@@ -737,7 +736,7 @@ sig_irbd_vs_control_pathway_relab_og_t$pathway <- rownames(sig_irbd_vs_control_p
 
 sig_irbd_vs_control_pathway_relab_og_t$pathway <- factor(sig_irbd_vs_control_pathway_relab_og_t$pathway, levels = order_of_pathway)
 
-pdf(file = "~/Desktop/LBD/analysis/pathway_analysis/irbd_vs_control/mean_diff_bar_irbd_control_v2.pdf", height = 5, width = 8)
+pdf(file = "../3-microbial_functional_pathway_analysis/irbd_vs_control/mean_diff_bar_irbd_control_v2.pdf", height = 5, width = 8)
 ggplot(sig_irbd_vs_control_pathway_relab_og_t, aes(x = as.factor(pathway), y = mean_diff)) +
   geom_bar(stat = "identity", fill = "#6abd45") +
   theme_bw() + 
@@ -790,7 +789,7 @@ lbd_vs_irbd_diff_abun_median <- log2_fc_results(lbd_vs_irbd_relab_transformed_fi
 sig_lbd_vs_irbd_diff_abun <- lbd_vs_irbd_diff_abun_median[[1]][lbd_vs_irbd_diff_abun_median[[1]]$p_value < 0.05 & lbd_vs_irbd_diff_abun_median[[1]]$log2fc != 0, ]
 nrow(sig_lbd_vs_irbd_diff_abun)
 sig_lbd_vs_irbd_diff_abun$group <- ifelse(sig_lbd_vs_irbd_diff_abun$log2fc>0, "LBD>iRBD", "LBD<iRBD")
-write.csv(sig_lbd_vs_irbd_diff_abun, file = "~/Desktop/LBD/analysis/pathway_analysis/lbd_vs_control/sig_lbd_vs_irbd_diff_abun.csv", row.names = F)
+write.csv(sig_lbd_vs_irbd_diff_abun, file = "../3-microbial_functional_pathway_analysis/lbd_vs_control/sig_lbd_vs_irbd_diff_abun.csv", row.names = F)
 
 # 7. Create the volcano plot
 lbd_vs_irbd_fc_results <- volcano_plot(lbd_vs_irbd_diff_abun_median[[2]], "LBD", "iRBD", -10, 10) 
@@ -805,13 +804,13 @@ boxplot_data <- rbind(lbd_vs_irbd_fc_results[[1]], lbd_vs_irbd_fc_results[[2]])
 boxplot_data_done <- boxplot_data[boxplot_data$Row.names %in% order_of_pathway, ]
 
 boxplot_long_df <- melt(boxplot_data_done[, 1:(ncol(boxplot_data_done)-6)], id.vars = "Row.names")
-write.csv(boxplot_long_df, "~/Desktop/LBD/analysis/pathway_analysis/irbd_vs_control_boxplot_long_df.csv")
+write.csv(boxplot_long_df, "../3-microbial_functional_pathway_analysis/irbd_vs_control_boxplot_long_df.csv")
 boxplot_long_df$condition <- ifelse(grepl("lbd", boxplot_long_df$variable), "LBD", "iRBD")
 colnames(boxplot_long_df)[1] <- "pathway"
 boxplot_long_df$pathway <- factor(boxplot_long_df$pathway, levels = order_of_pathway)
 boxplot_long_df$condition <- factor(boxplot_long_df$condition, levels = c("LBD", "iRBD"))
 
-pdf(file = "lbd_vs_irbd_boxplot.pdf", height = 6, width = 10)
+pdf(file = "../3-microbial_functional_pathway_analysis/lbd_vs_irbd_boxplot.pdf", height = 6, width = 10)
 plot <- ggplot(boxplot_long_df, 
                aes(x = pathway, y = value, fill = condition)) + 
   geom_boxplot(outlier.color = "black", 
@@ -834,7 +833,7 @@ plot <- ggplot(boxplot_long_df,
 print(plot)
 dev.off()
 
-df_plot <- read.csv(file = "~/Desktop/LBD/analysis/pathway_analysis/pwy-5030.csv")
+df_plot <- read.csv(file = "../3-microbial_functional_pathway_analysis/pwy-5030.csv")
 df_plot$condition <- factor(df_plot$condition, levels = c("LBD", "LBD_Control", "iRBD", "iRBD_Control"))
 
 plot <- ggplot(df_plot, aes(x = condition, y = value, fill = condition)) + 
@@ -853,7 +852,7 @@ plot <- ggplot(df_plot, aes(x = condition, y = value, fill = condition)) +
   labs(x = "", 
        y = "Relative abundance (arcsine square-root transformed)")
 
-pdf(file = "~/Desktop/LBD/analysis/pathway_analysis/pwy5030.pdf", height = 6, width = 4)
+pdf(file = "../3-microbial_functional_pathway_analysis/pwy5030.pdf", height = 6, width = 4)
 print(plot)
 dev.off()
 
@@ -878,7 +877,7 @@ sig_lbd_vs_irbd_pathway_relab_og_t$pathway <- rownames(sig_lbd_vs_irbd_pathway_r
 
 sig_lbd_vs_irbd_pathway_relab_og_t$pathway <- factor(sig_lbd_vs_irbd_pathway_relab_og_t$pathway, levels = order_of_pathway)
 
-pdf(file = "~/Desktop/LBD/analysis/pathway_analysis/lbd_vs_irbd/mean_diff_bar_lbd_vs_irbd_v2.pdf", height = 5, width = 8)
+pdf(file = "../3-microbial_functional_pathway_analysis/lbd_vs_irbd/mean_diff_bar_lbd_vs_irbd_v2.pdf", height = 5, width = 8)
 ggplot(sig_lbd_vs_irbd_pathway_relab_og_t, aes(x = as.factor(pathway), y = mean_diff)) +
   geom_bar(stat = "identity", fill = "#6abd45") +
   theme_bw() + 
@@ -930,10 +929,10 @@ irbd_vs_control_prev_filtered <- prevalence_cutoff(irbd_vs_control_prev, metadat
 irbd_vs_control_prev_results <- fisher_exact_test(irbd_vs_control_prev_filtered, "irbd_vs_control_prevalence_results_v2.csv", "iRBD", "iRBD_control")
 
 
-bbb <- read.csv(file = "~/Desktop/LBD/analysis/pathway_analysis/irbd_vs_control_prevalence_results.csv", row.names = 1)
+bbb <- read.csv(file = "../3-microbial_functional_pathway_analysis/irbd_vs_control_prevalence_results.csv", row.names = 1)
 bbb$qval <- p.adjust(bbb$p_value, method = "BH")
 
-aaa <- read.csv(file = "~/Desktop/LBD/analysis/pathway_analysis/lbd_vs_control_prevalence_results.csv", row.names = 1)
+aaa <- read.csv(file = "../3-microbial_functional_pathway_analysis/lbd_vs_control_prevalence_results.csv", row.names = 1)
 aaa$qval <- p.adjust(aaa$p_value, method = "BH")
 
 ###############################################################################
@@ -963,7 +962,7 @@ heatmap_z(sig_lbd_vs_irbd_prev_ordered, "LBD>iRBD", "iRBD<LBD", "sig_results_lbd
 lbd_vs_control_prev_pathway_sig <- lbd_vs_control_prev_results[lbd_vs_control_prev_results$p_value < 0.05, ]
 names(lbd_vs_control_prev_pathway_sig)[2] <- "lbd_vs_control_pval"
 # write.csv(lbd_vs_control_prev_pathway_sig, file = "lbd_vs_control_prev_pathway_sig.csv")
-lbd_vs_control_prev_pathway_sig <- read.csv(file = "~/Desktop/LBD/analysis/pathway_analysis/lbd_vs_control_prev_pathway_sig.csv", row.names = 1)
+lbd_vs_control_prev_pathway_sig <- read.csv(file = "../3-microbial_functional_pathway_analysis/lbd_vs_control_prev_pathway_sig.csv", row.names = 1)
 
 
 irbd_vs_control_prev_pathway_sig <- irbd_vs_control_prev_results[irbd_vs_control_prev_results$p_value < 0.05, ]
@@ -973,7 +972,7 @@ irbd_vs_control_prev_pathway_sig <- irbd_vs_control_prev_results[irbd_vs_control
 
 ### Differential prevalent species and pathways together ###
 
-lbd_vs_control_prev_species_sig <- read.csv(file = "~/Desktop/LBD/analysis/differential_prevalence_analysis/sig_lbd_vs_control_prev_new.csv")
+lbd_vs_control_prev_species_sig <- read.csv(file = "../3-microbial_functional_pathway_analysis/sig_lbd_vs_control_prev_new.csv")
 lbd_vs_control_prev_species_sig <- lbd_vs_control_prev_species_sig[, 1:4]
 colnames(lbd_vs_control_prev_species_sig)[1] <- "overall"
 lbd_vs_control_prev_species_sig$c <- "species"
@@ -1004,7 +1003,7 @@ p <- pheatmap(data.matrix(lbd_vs_control_all[3:4]),
 print(p)
 dev.off()
 
-irbd_vs_control_prev_species_sig <- read.csv(file = "~/Desktop/LBD/analysis/differential_prevalence_analysis/irbd_vs_control/sig_results_irbd_vs_control.csv")
+irbd_vs_control_prev_species_sig <- read.csv(file = "../3-microbial_functional_pathway_analysis/irbd_vs_control/sig_results_irbd_vs_control.csv")
 irbd_vs_control_prev_species_sig <- irbd_vs_control_prev_species_sig[, 1:4]
 colnames(irbd_vs_control_prev_species_sig)[1] <- "overall"
 irbd_vs_control_prev_species_sig$c <- "species"
@@ -1044,7 +1043,7 @@ lbd_irbd_df <- merge(lbd_df, irbd_df, by = "pathway", all = T)
 pathway_lbd_irbd_df <- lbd_irbd_df[, c(1, 3, 4, 6, 7)]
 colnames(pathway_lbd_irbd_df)[1] <- "overall"
 
-species_lbd_irbd_df <- read.csv(file = "~/Desktop/LBD/analysis/differential_prevalence_analysis/lbd_and_irbd_prev_species.csv")
+species_lbd_irbd_df <- read.csv(file = "../3-microbial_functional_pathway_analysis/lbd_and_irbd_prev_species.csv")
 colnames(species_lbd_irbd_df)[1] <- "overall"
 
 all_lbd_irbd_df <- rbind(species_lbd_irbd_df, pathway_lbd_irbd_df)

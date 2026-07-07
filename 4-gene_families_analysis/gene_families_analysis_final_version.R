@@ -5,8 +5,7 @@ library(lmerTest)
 library(tidyr)
 
 ###############################################################################
-folder_path <- "~/Desktop/LBD/analysis/gene_families/"
-setwd(folder_path)
+setwd("../4-gene_families_analysis")
 ###############################################################################
 
 gene_families <- as.data.frame(read_excel(path = "lbd_vs_control_selected_gene_families.xlsx", sheet = "gene_families"))
@@ -47,7 +46,7 @@ gene_families_cutoff[gene_families_cutoff <= cut_off] <- 0
 ## Number of absence species in each sample
 apply(gene_families_cutoff, 2, function(x) sum(as.numeric(x) == 0, na.rm = TRUE))
 
-metadata <- read.csv(file = "~/Desktop/LBD/analysis/imputed_BMI_metadata.csv", row.names = 1)
+metadata <- read.csv(file = "./0-raw_data/imputed_BMI_metadata.csv", row.names = 1)
 
 gene_families_t <- data.frame(t(gene_families_cutoff))
 gene_families_done <- merge(gene_families_t, metadata, by = "row.names")

@@ -7,22 +7,21 @@ library(tidyverse)
 library(ppcor)
 
 ###############################################################################
-folder_path <- "~/Desktop/LBD/analysis/correlation_analysis/partial_correlation_results/new"
-setwd(folder_path)
+setwd("../5-correlation_analysis")
 ###############################################################################
 
 # 1. Read the species and pathway relative abundance data and modify the sample names. 
-species_data <- read.table(file = "~/Desktop/LBD/analysis/metaphlan_results_new.tsv", sep = "\t", header = T, row.names = 1)
+species_data <- read.table(file = "./metaphlan_results_new.tsv", sep = "\t", header = T, row.names = 1)
 species <- species_data[grepl("s__", rownames(species_data)) & !grepl("t__", rownames(species_data)), ]
 rownames(species) <- gsub(".*s__", "", rownames(species))
 colnames(species) <- gsub("metaphlan_|_S.*", "", names(species))
 
-pathway_data <- read.csv(file = "/Users/M306307/Desktop/LBD/analysis/pathway_results.tsv", sep = "\t", header = T, row.names = 1)
+pathway_data <- read.csv(file = "./pathway_results.tsv", sep = "\t", header = T, row.names = 1)
 colnames(pathway_data) <- gsub("_S.*", "", colnames(pathway_data))
 pathway <- pathway_data
 
 # 2. Read the metadata
-metadata <- read.csv(file = "/Users/M306307/Desktop/LBD/analysis/imputed_BMI_metadata_old.csv", sep = ",", header = T, row.names = 1)
+metadata <- read.csv(file = "./0-raw_data/imputed_BMI_metadata_old.csv", sep = ",", header = T, row.names = 1)
 species_clean <- species[, c(rownames(metadata))]
 pathway_clean <- pathway[, c(rownames(metadata))]
 

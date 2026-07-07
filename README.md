@@ -47,14 +47,44 @@ Comparisons: LBD vs. LBD-Control and iRBD vs. iRBD-Control
         pcoa_irbd_vs_control.pdf                     # PCoA plot for iRBD vs. iRBD-Control
 
 2-microbial_taxa_analysis/
-    different_prevalence_analysis_final_version.R
+    species_preprocessed.csv                            # Preprocessed species relative abundance (output of script 1, input for script 2)
+    1-differential_abundance_analysis_final_version.R
+    1-lbd_vs_control_diff_abundance_results/
+        lbd_vs_control_differential_abundance_p_values.csv   # Full p-value table (LBD vs. LBD-Control)
+        lbd_vs_control_diff_abun_p_fc_done.csv               # Results with fold change
+        sig_lbd_vs_control_diff_abun_species.csv             # Significant differentially abundant species
+        species_higher_in_LBD_than_Control.csv
+        species_higher_in_Control_than_LBD.csv
+        cohensD_lbd_vs_control_species.csv                   # Cohen's D effect sizes
+        volcano_plot_LBD_vs_Control.pdf
+        lbd_vs_control_boxplot_species.pdf
+        cohensD_LBD_species.pdf
+    2-different_prevalence_analysis_final_version.R
+    2-irbd_vs_control_diff_abundance_results/
+        irbd_vs_control_differential_abundance_p_values.csv  # Full p-value table (iRBD vs. iRBD-Control)
+        irbd_vs_control_diff_abun_p_fc_done.csv              # Results with fold change
+        species_higher_in_iRBD_than_Control.csv
+        species_higher_in_Control_than_iRBD.csv
+        cohensD_irbd_vs_control_species.csv                  # Cohen's D effect sizes
+        volcano_plot_iRBD_vs_Control.pdf
+        irbd_vs_control_boxplot_species.pdf
+        cohensD_irbd_vs_control_species.pdf
+    3-lbd_vs_control_diff_prevalence_results/
+        lbd_vs_control_prevalence_results.csv
+        sig_lbd_vs_control_prev.csv                          # Significant differentially prevalent species
+    4-irbd_vs_control_diff_prevalence_results/
+        irbd_vs_control_prevalence_results.csv
+        sig_irbd_vs_control_prev.csv                         # Significant differentially prevalent species
 
 3-microbial_functional_pathway_analysis/
     pathway_analysis_final_version.R
     pathway_taxonomy_analysis_final_version.R
     pathways_contributed_by_bacterial_species_final_version.R
 
-4-correlation_analysis/
+4-gene_families_analysis/
+    gene_families_analysis_final_version.R
+
+5-correlation_analysis/
     partial_correlation_analysis.R
 ```
 
@@ -69,9 +99,16 @@ Comparisons: LBD vs. LBD-Control and iRBD vs. iRBD-Control
 
 ### 2. Microbial Taxa Analysis (`2-microbial_taxa_analysis/`)
 
+**Script 1 — Differential Abundance** (`1-differential_abundance_analysis_final_version.R`):
+- Mixed-effects linear models (`lmerTest`) with household as a random effect to identify differentially abundant species
+- Abundance cutoff (10^−4.7) applied before testing; arcsine square-root transformation of proportions
+- Volcano plots, per-species boxplots, and Cohen's D effect sizes for both LBD vs. LBD-Control and iRBD vs. iRBD-Control
+- Outputs a preprocessed species table (`species_preprocessed.csv`) used as input for script 2
+
+**Script 2 — Differential Prevalence** (`2-different_prevalence_analysis_final_version.R`):
 - Differential prevalence analysis using Fisher's exact test with Benjamini-Hochberg FDR correction
 - Prevalence cutoff filtering (species must be detected in ≥10% of samples)
-- Heatmaps (`pheatmap`, `ComplexHeatmap`) and bar plots of significant species
+- Results saved separately for LBD vs. LBD-Control and iRBD vs. iRBD-Control
 
 ### 3. Functional Pathway Analysis (`3-microbial_functional_pathway_analysis/`)
 
@@ -79,7 +116,13 @@ Comparisons: LBD vs. LBD-Control and iRBD vs. iRBD-Control
 - Volcano plots of pathway effect sizes vs. significance
 - Attribution of pathway abundance to contributing bacterial species (HUMAnN stratified output)
 
-### 4. Partial Correlation Analysis (`4-correlation_analysis/`)
+### 4. Gene Families Analysis (`4-gene_families_analysis/`)
+
+- Differential abundance analysis of UniRef90 gene families (HUMAnN output)
+- Abundance cutoff (10^−7) applied to filter low-abundance gene families
+- Mixed-effects linear models with household as a random effect
+
+### 5. Partial Correlation Analysis (`5-correlation_analysis/`)
 
 - Spearman partial correlations between microbial features (species and pathways) and clinical measurements (e.g., MoCA, CDR, UPDRS)
 - Covariates: age, BMI
@@ -91,7 +134,8 @@ Comparisons: LBD vs. LBD-Control and iRBD vs. iRBD-Control
 install.packages(c(
   "lmerTest", "vegan", "ade4", "ggplot2", "reshape2",
   "dplyr", "ggpubr", "tidyr", "RColorBrewer",
-  "pheatmap", "ppcor", "tidyverse", "ggrepel", "purrr"
+  "pheatmap", "ppcor", "tidyverse", "ggrepel", "purrr",
+  "effectsize", "readxl", "writexl"
 ))
 
 # Bioconductor
@@ -105,7 +149,7 @@ All scripts apply a consistent preprocessing pipeline before statistical testing
 
 1. Extract species-level rows from MetaPhlAn output (rows matching `s__` but not `t__`)
 2. Normalize counts to relative proportions (column sums = 1)
-3. Apply an abundance cutoff of 10^-4.5 (species below this threshold in a sample are set to zero)
+3. Apply an abundance cutoff (features below this threshold in a sample are set to zero)
 4. Arcsine square-root transformation for beta diversity and pathway analyses
 5. Merge with sample metadata; analyses use matched case-control pairs (household ID as random effect)
 
