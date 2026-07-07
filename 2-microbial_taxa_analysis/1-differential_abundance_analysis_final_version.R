@@ -54,7 +54,7 @@ dev.off()
 # 9. Apply the cutoff to the species proportion data, setting values below the threshold to zero. This step helps to filter out low-abundance species that may not be biologically relevant or may introduce noise into downstream analyses.
 cut_off <- 10^-4.7
 species_cutoff <- species_prop
-species_cutoff[species_cutoff <= cut_off] <- 0
+species_cutoff[species_cutoff < cut_off] <- 0
 
 # 10. Add metadata to the proportion data
 species_t <- as.data.frame(t(species_cutoff))
