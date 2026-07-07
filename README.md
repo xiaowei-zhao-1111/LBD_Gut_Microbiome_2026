@@ -9,7 +9,7 @@
 ![study_design](./study_design.jpg)
 
 
-This repository contains the R analysis code for a gut microbiome study comparing individuals with Lewy Body Dementia (LBD) and isolated REM Sleep Behavior Disorder (iRBD) against their respective household controls. Shotgun metagenomic data were profiled using MetaPhlAn (species-level taxonomy) and HUMAnN (functional pathways).
+This repository contains the R analysis code for a gut microbiome study comparing individuals with Lewy Body Disease (LBD) and isolated REM Sleep Behavior Disorder (iRBD) against their matched household controls. Shotgun metagenomic data were profiled using MetaPhlAn (taxonomy) and HUMAnN (functional pathways and gene families).
 
 ## Study Design
 
