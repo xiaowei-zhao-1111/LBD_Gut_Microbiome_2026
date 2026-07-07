@@ -100,7 +100,7 @@ Comparisons: LBD vs. LBD-Control and iRBD vs. iRBD-Control
 ### 2. Microbial Taxa Analysis (`2-microbial_taxa_analysis/`)
 
 **Script 1 — Differential Abundance** (`1-differential_abundance_analysis_final_version.R`):
-- Species with relative abundance below 10^−4.7 excluded
+- Species with relative abundance below 10^−4.7 are set to 0
 - Species detected in fewer than 10% of samples excluded
 - Relative abundances arcsine square-root transformed prior to statistical testing
 - Mixed-effects linear models (`lmerTest`) with household as a random effect to identify differentially abundant species
@@ -108,7 +108,7 @@ Comparisons: LBD vs. LBD-Control and iRBD vs. iRBD-Control
 - Outputs a preprocessed species table (`species_preprocessed.csv`) used as input for script 2
 
 **Script 2 — Differential Prevalence** (`2-different_prevalence_analysis_final_version.R`):
-- Species with relative abundance below 10^−4.7 excluded
+- Species with relative abundance below 10^−4.7 are set to 0
 - Species detected in fewer than 10% of samples excluded
 - Relative abundances arcsine square-root transformed prior to statistical testing
 - Differential prevalence analysis using Fisher's exact test with Benjamini-Hochberg FDR correction
