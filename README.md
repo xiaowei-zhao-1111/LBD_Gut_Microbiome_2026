@@ -1,8 +1,10 @@
 # Shotgun metagenomic analysis reveals taxonomic and functional alterations in the gut microbiome across prodromal and symptomatic Lewy body disease
 
-**DOI:** 
-
 **Authors:** Xiaowei Zhao, Stuart J. McCarter, Vinod K. Gupta, Kiera M. Grant, Erik K. St. Louis, Kejal Kantarci, Rodolfo Savica, Max Hill, Helen E. Vuong, Christopher Staley, Bradley F. Boeve, Owen A. Ross, Levi M. Teigen, and Jaeyun Sung
+
+**Journal:** Frontiers in Microbiomes (July 2026)
+
+**DOI:** 10.3389/frmbi.2026.1834726
 
 ## Overview
 
